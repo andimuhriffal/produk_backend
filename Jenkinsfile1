@@ -4,12 +4,15 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '5'))
     }
     stages {
-        stage('scan'){
-         steps {
-            withSonarQubeEnv(installationName: 'SonarQube') {
-                sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar'
+        stage('SonarQube Scan') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh '''
+                        chmod +x ./mvnw
+                        ./mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar
+                    '''
+                }
             }
-         }
-      }
-   }
+        }
+    }
 }
